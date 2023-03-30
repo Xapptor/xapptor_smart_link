@@ -183,7 +183,7 @@ class _XapptorSmartLinkState extends State<XapptorSmartLink> {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${widget.title} Version: ${widget.version}',
+                      'Smart Link Version: ${widget.version}',
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                   ),
