@@ -1,10 +1,11 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class XapptorSmartLink extends StatefulWidget {
-  final bool is_android;
-  final bool is_ios;
+  final TargetPlatform platform;
   final String title;
   final String description;
   final String android_url;
@@ -15,8 +16,8 @@ class XapptorSmartLink extends StatefulWidget {
   final bool download_android_apk;
 
   const XapptorSmartLink({
-    required this.is_android,
-    required this.is_ios,
+    super.key,
+    required this.platform,
     required this.title,
     required this.description,
     required this.android_url,
@@ -32,27 +33,37 @@ class XapptorSmartLink extends StatefulWidget {
 }
 
 class _XapptorSmartLinkState extends State<XapptorSmartLink> {
-  main_button_action() {
-    String url = widget.is_android ? widget.android_url : widget.ios_url;
+  bool is_android = false;
+  bool is_ios = false;
 
-    if (widget.is_ios || !widget.download_android_apk) {
+  @override
+  void initState() {
+    is_android = widget.platform == TargetPlatform.android;
+    is_ios = widget.platform == TargetPlatform.iOS;
+    super.initState();
+  }
+
+  main_button_action() {
+    String url = is_android ? widget.android_url : widget.ios_url;
+
+    if (is_ios || !widget.download_android_apk) {
       html.window.location.replace(url);
     } else {
-      downloadAndroid(widget.android_url);
+      download_android(widget.android_url);
     }
   }
 
   secondary_button_action() {
-    String url = widget.is_android ? widget.ios_url : widget.android_url;
+    String url = is_android ? widget.ios_url : widget.android_url;
 
-    if (widget.is_ios && widget.download_android_apk) {
-      downloadAndroid(widget.android_url);
+    if (is_ios && widget.download_android_apk) {
+      download_android(widget.android_url);
     } else {
       html.window.location.replace(url);
     }
   }
 
-  downloadAndroid(String url) {
+  download_android(String url) {
     html.AnchorElement anchor_element = html.AnchorElement(href: url);
     anchor_element.download = url;
     anchor_element.click();
@@ -60,13 +71,13 @@ class _XapptorSmartLinkState extends State<XapptorSmartLink> {
 
   @override
   Widget build(BuildContext context) {
-    String play_store = 'Google Play';
-    String app_store = 'App Store';
-    String platform = widget.is_android ? play_store : app_store;
-    String contrary_platform = platform == play_store ? app_store : play_store;
+    String play_store_label = 'Google Play';
+    String app_store_label = 'App Store';
+    String platform = is_android ? play_store_label : app_store_label;
+    String contrary_platform_name = platform == play_store_label ? app_store_label : play_store_label;
 
     String main_button_title = platform;
-    String secondary_button_title = contrary_platform;
+    String secondary_button_title = contrary_platform_name;
 
     double button_height = 40;
     double button_width = 140;
@@ -74,15 +85,15 @@ class _XapptorSmartLinkState extends State<XapptorSmartLink> {
     Color button_color = Colors.black;
 
     Icon main_button_icon = Icon(
-      widget.is_android ? FontAwesomeIcons.googlePlay : FontAwesomeIcons.apple,
+      is_android ? FontAwesomeIcons.googlePlay : FontAwesomeIcons.apple,
       color: Colors.white,
-      size: widget.is_android ? 20 : 25,
+      size: is_android ? 20 : 25,
     );
 
     Icon secondary_button_icon = Icon(
-      widget.is_android ? FontAwesomeIcons.apple : FontAwesomeIcons.googlePlay,
+      is_android ? FontAwesomeIcons.apple : FontAwesomeIcons.googlePlay,
       color: Colors.white,
-      size: widget.is_android ? 25 : 20,
+      size: is_android ? 25 : 20,
     );
 
     double sized_box_height = 20;
@@ -93,7 +104,9 @@ class _XapptorSmartLinkState extends State<XapptorSmartLink> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+        ),
         backgroundColor: widget.main_color,
       ),
       body: RefreshIndicator(
@@ -148,7 +161,9 @@ class _XapptorSmartLinkState extends State<XapptorSmartLink> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 main_button_icon,
-                                Text(main_button_title),
+                                Text(
+                                  main_button_title,
+                                ),
                               ],
                             ),
                           ),
@@ -172,7 +187,9 @@ class _XapptorSmartLinkState extends State<XapptorSmartLink> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 secondary_button_icon,
-                                Text(secondary_button_title),
+                                Text(
+                                  secondary_button_title,
+                                ),
                               ],
                             ),
                           ),
