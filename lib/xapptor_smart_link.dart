@@ -1,8 +1,6 @@
-// ignore_for_file: avoid_web_libraries_in_flutter
-
-import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:web/web.dart' as web;
 
 class XapptorSmartLink extends StatefulWidget {
   final TargetPlatform platform;
@@ -47,7 +45,7 @@ class _XapptorSmartLinkState extends State<XapptorSmartLink> {
     String url = is_android ? widget.android_url : widget.ios_url;
 
     if (is_ios || !widget.download_android_apk) {
-      html.window.location.replace(url);
+      web.window.location.replace(url);
     } else {
       download_android(widget.android_url);
     }
@@ -59,12 +57,13 @@ class _XapptorSmartLinkState extends State<XapptorSmartLink> {
     if (is_ios && widget.download_android_apk) {
       download_android(widget.android_url);
     } else {
-      html.window.location.replace(url);
+      web.window.location.replace(url);
     }
   }
 
   download_android(String url) {
-    html.AnchorElement anchor_element = html.AnchorElement(href: url);
+    web.HTMLAnchorElement anchor_element = web.HTMLAnchorElement();
+    anchor_element.href = url;
     anchor_element.download = url;
     anchor_element.click();
   }
@@ -111,7 +110,7 @@ class _XapptorSmartLinkState extends State<XapptorSmartLink> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          html.window.location.reload();
+          web.window.location.reload();
         },
         triggerMode: RefreshIndicatorTriggerMode.anywhere,
         color: widget.main_color,
