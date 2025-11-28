@@ -101,6 +101,8 @@ class _XapptorSmartLinkState extends State<XapptorSmartLink> {
     double screen_height = MediaQuery.of(context).size.height;
     double screen_width = MediaQuery.of(context).size.width;
 
+    double outline_border_radius = 16;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -129,7 +131,7 @@ class _XapptorSmartLinkState extends State<XapptorSmartLink> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(outline_border_radius),
                           child: Image.asset(
                             widget.logo_path,
                             height: portrait ? 100 : 200,
