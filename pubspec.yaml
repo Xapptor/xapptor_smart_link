@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  font_awesome_flutter: ^10.12.0
+  font_awesome_flutter: ^10.9.1
   web: ^1.1.1
 
 dev_dependencies:
